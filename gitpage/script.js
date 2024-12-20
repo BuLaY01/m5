@@ -11,11 +11,11 @@ async function result() {
   setting.classList.remove("hider");
   search.classList.add("hider");
   key.classList.add("hider");
-  card.classList.add('hider')
+  card.classList.add("hider");
 
   let responce = await fetch(`https://api.github.com/users/${key.value}`);
 
-  key.value = ''
+  key.value = "";
 
   if (responce.ok) {
     saver = await responce.json();
