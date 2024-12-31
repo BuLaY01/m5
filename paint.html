@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    } */
+
+    canvas {
+      border: 5px solid black;
+    }
+  </style>
+  <body>
+    <canvas id="canvas"> </canvas>
+  </body>
+  <script>
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+
+    canvas.width = 1000;
+    canvas.height = 1000;
+
+    let config = { size: 10, color: "black" };
+    let pos_x = [];
+    let pos_y = [];
+
+    let draw = false;
+    canvas.addEventListener("mousedown", () => {
+      draw = true;
+      context.beginPath()
+    });
+
+    canvas.addEventListener("mouseup", () => {
+      draw = false;
+    });
+    canvas.onmousemove = (e) => save_mouse(e);
+
+    function save_mouse(e) {
+        if (draw == true) {
+            pos_x.push(e.clientX)
+            pos_y.push(e.clientY)
+            draw_line(e.clientX, e.clientY)
+        }
+    }
+
+    function draw_line(x, y) {
+        context.lineWidth = config.size
+        context.strokeStyle = config.color
+        context.lineTo(x, y)
+        context.stroke()
+    }
+  </script>
+</html>
