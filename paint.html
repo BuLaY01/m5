@@ -39,7 +39,7 @@
     let draw = false;
     canvas.addEventListener("mousedown", () => {
       draw = true;
-      context.beginPath()
+      context.beginPath();
     });
 
     canvas.addEventListener("mouseup", () => {
@@ -48,18 +48,65 @@
     canvas.onmousemove = (e) => save_mouse(e);
 
     function save_mouse(e) {
-        if (draw == true) {
-            pos_x.push(e.clientX)
-            pos_y.push(e.clientY)
-            draw_line(e.clientX, e.clientY)
-        }
+      if (draw == true) {
+        pos_x.push(e.clientX);
+        pos_y.push(e.clientY);
+        draw_line(e.clientX, e.clientY);
+      }
+      else{
+        pos_x.push(false)
+        pos_y.push(false)
+      }
     }
 
     function draw_line(x, y) {
-        context.lineWidth = config.size
-        context.strokeStyle = config.color
-        context.lineTo(x, y)
-        context.stroke()
+      context.lineWidth = config.size;
+      context.strokeStyle = config.color;
+      context.lineTo(x, y);
+      context.stroke();
     }
+
+    function clear_canvas() {
+      canvas.width = canvas.width;
+      canvas.height = canvas.height;
+    }
+
+    function save_canvas() {
+      const image = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "canvas_image.png";
+      link.click();
+    }
+
+    function delete_move() {
+      pos_x.splice(-5);
+      pos_y.splice(-5);
+
+      for (let i = 0; i < pos_x.length; i++) {
+        if(pos_x[i] == false) {
+          context.beginPath()
+        }
+        else{
+          draw_line(pos_x[i], pos_y[i]);
+        }
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code == "KeyC") {
+        pos_x = [];
+        pos_y = [];
+        clear_canvas();
+      }
+      if (e.code == "KeyZ") {
+        clear_canvas();
+        delete_move();
+      }
+      if (e.code == "Space") {
+        save_canvas();
+      }
+    });
   </script>
 </html>
