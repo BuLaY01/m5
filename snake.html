@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: black;
+    }
+
+    canvas {
+      border: 5px solid white;
+    }
+  </style>
+  <body>
+    <canvas id="canvas"> </canvas>
+  </body>
+  <script>
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+    let grid = 25; //отвечает за кол-во квадратов
+    let count = 0;
+    let snake = {
+      speed: 4,
+      x: 0,
+      y: 0,
+      dx: 0,
+      dy: 0,
+      tails: [],
+      count_tails: 1,
+    };
+    let eat = {x: 0, y: 0}
+
+    canvas.width = 1000;
+    canvas.height = 1000;
+
+    function clear_canvas() {
+      canvas.width = canvas.width;
+      canvas.height = canvas.height;
+    }
+
+    function eat_paint() {
+        context.fillStyle = 'red'
+        context.fillRect(eat.x, eat.y, grid, grid)
+    }
+
+    function start() {
+        requestAnimationFrame(start)
+        count++
+        if (snake.speed > count) {
+            return 
+        }
+        count = 0
+        clear_canvas()
+        eat_paint()
+    }
+    console.log('Test 2')
+    requestAnimationFrame(start)
+
+    // document.addEventListener("keydown", (e) => {
+    //   if (e.code == "KeyC") {
+    //     pos_x = [];
+    //     pos_y = [];
+    //     clear_canvas();
+    //   }
+    //   if (e.code == "KeyZ") {
+    //     clear_canvas();
+    //     delete_move();
+    //   }
+    //   if (e.code == "Space") {
+    //     save_canvas();
+    //   }
+    // });
+  </script>
+</html>
