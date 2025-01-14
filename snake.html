@@ -35,12 +35,12 @@
       speed: 4,
       x: 0,
       y: 0,
-      dx: 0,
+      dx: grid,
       dy: 0,
       tails: [],
       count_tails: 1,
     };
-    let eat = {x: 0, y: 0}
+    let eat = { x: 0, y: 0 };
 
     canvas.width = 1000;
     canvas.height = 1000;
@@ -51,22 +51,66 @@
     }
 
     function eat_paint() {
-        context.fillStyle = 'red'
-        context.fillRect(eat.x, eat.y, grid, grid)
+      context.fillStyle = "red";
+      context.fillRect(eat.x, eat.y, grid, grid);
+      if (snake.x == eat.x && snake.y == eat.y) {
+        snake.count_tails += 1;
+        eat.x = random_num(0, canvas.width / grid) * grid;
+        eat.y = random_num(0, canvas.height / grid) * grid;
+      }
     }
 
     function start() {
-        requestAnimationFrame(start)
-        count++
-        if (snake.speed > count) {
-            return 
-        }
-        count = 0
-        clear_canvas()
-        eat_paint()
+      requestAnimationFrame(start);
+      count++;
+      if (snake.speed > count) {
+        return;
+      }
+      count = 0;
+      clear_canvas();
+      eat_paint();
+
+      snake_paint();
     }
-    console.log('Test 2')
-    requestAnimationFrame(start)
+
+    requestAnimationFrame(start);
+
+    function random_num(min, max) {
+      // (1, 100) => 0.5 * (100 - 1) + 1
+      let num = Math.random() * (max - min) + min;
+      return Math.floor(num);
+    }
+
+    function snake_paint() {
+      snake.x += snake.dx;
+      snake.y += snake.dy;
+
+      if(snake.x < 0) {
+        snake.x = canvas.width - grid
+      }
+      else if (snake.x >= canvas.width) {
+        snake.x = 0
+      }
+
+      if(snake.y < 0) {
+        snake.y = canvas.height - grid
+      }
+      else if (snake.y >= canvas.height) {
+        snake.y = 0
+      }
+
+      snake.tails.unshift({
+        x: snake.x,
+        y: snake.y,
+      });
+      if (snake.tails.length > snake.count_tails) {
+        snake.tails.pop();
+      }
+      for (let tail of snake.tails) {
+        context.fillStyle = "green";
+        context.fillRect(tail.x, tail.y, grid, grid);
+      }
+    }
 
     // document.addEventListener("keydown", (e) => {
     //   if (e.code == "KeyC") {
