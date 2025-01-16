@@ -32,13 +32,13 @@
     let grid = 25; //отвечает за кол-во квадратов
     let count = 0;
     let snake = {
-      speed: 4,
+      speed: 20,
       x: 0,
       y: 0,
       dx: grid,
       dy: 0,
       tails: [],
-      count_tails: 1,
+      count_tails: 2
     };
     let eat = { x: 0, y: 0 };
 
@@ -69,8 +69,8 @@
       count = 0;
       clear_canvas();
       eat_paint();
-
       snake_paint();
+      finish()
     }
 
     requestAnimationFrame(start);
@@ -85,18 +85,16 @@
       snake.x += snake.dx;
       snake.y += snake.dy;
 
-      if(snake.x < 0) {
-        snake.x = canvas.width - grid
-      }
-      else if (snake.x >= canvas.width) {
-        snake.x = 0
+      if (snake.x < 0) {
+        snake.x = canvas.width - grid;
+      } else if (snake.x >= canvas.width) {
+        snake.x = 0;
       }
 
-      if(snake.y < 0) {
-        snake.y = canvas.height - grid
-      }
-      else if (snake.y >= canvas.height) {
-        snake.y = 0
+      if (snake.y < 0) {
+        snake.y = canvas.height - grid;
+      } else if (snake.y >= canvas.height) {
+        snake.y = 0;
       }
 
       snake.tails.unshift({
@@ -108,23 +106,51 @@
       }
       for (let tail of snake.tails) {
         context.fillStyle = "green";
-        context.fillRect(tail.x, tail.y, grid, grid);
+        context.fillRect(tail.x, tail.y, grid - 1, grid - 1);
       }
     }
 
-    // document.addEventListener("keydown", (e) => {
-    //   if (e.code == "KeyC") {
-    //     pos_x = [];
-    //     pos_y = [];
-    //     clear_canvas();
-    //   }
-    //   if (e.code == "KeyZ") {
-    //     clear_canvas();
-    //     delete_move();
-    //   }
-    //   if (e.code == "Space") {
-    //     save_canvas();
-    //   }
-    // });
+    function finish() {
+      for (let i = 0; i < snake.tails.length; i++) {
+        for (let j = 0; j < snake.tails.length; j++) {
+          let s1 = snake.tails[i]
+          let s2 = snake.tails[j]
+          if (s1.x == s2.x && s1.y == s2.y && i != j) {
+            snake.x = 0
+            snake.y = 0
+            snake.count_tails = 2
+            snake.tails = []
+            snake.dx = grid
+            snake.dy = 0
+          }
+        }
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code == "KeyA" && snake.dx == 0) {
+        console.log('KeyA')
+        snake.dx = -grid;
+        snake.dy = 0;
+      }
+
+      else if (e.code == "KeyW" && snake.dy == 0) {
+        console.log('KeyW')
+        snake.dy = -grid;
+        snake.dx = 0;
+      }
+
+      else if (e.code == "KeyD" && snake.dx == 0) {
+        console.log('KeyD')
+        snake.dx = +grid;
+        snake.dy = 0;
+      }
+
+      else if (e.code == "KeyS" && snake.dy == 0) {
+        console.log('KeyS')
+        snake.dy = +grid;
+        snake.dx = 0;
+      }
+    });
   </script>
 </html>
